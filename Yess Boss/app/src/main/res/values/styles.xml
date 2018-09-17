@@ -1,0 +1,28 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <!--TODO: Change Your Picker Theme Before Sign Your APK.-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="android:datePickerDialogTheme">@style/PickerTheme</item>-->
+        <!--<item name="android:timePickerDialogTheme">@style/PickerTheme</item>-->
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Gets rid of the search icon -->
+        <item name="searchIcon">@drawable/ic_search_white</item>
+        <!-- Gets rid of the close icon when the SearchView is expanded -->
+        <item name="closeIcon">@drawable/ic_clear</item>
+        <!-- Gets rid of the search icon when the SearchView is expanded -->
+        <item name="searchHintIcon">@null</item>
+        <!-- The hint text that appears when the user has not typed anything -->
+        <item name="queryHint">@string/search_hint</item>
+    </style>
+
+    <style name="PickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+</resources>

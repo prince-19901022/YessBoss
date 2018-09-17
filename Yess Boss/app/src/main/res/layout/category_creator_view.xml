@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <View
+        android:id="@+id/title_area"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dialog_title_area_height"
+        android:background="@color/colorAccent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/right_margin"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/create_task_category"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/title_area"
+        app:layout_constraintLeft_toLeftOf="@id/title_area"
+        app:layout_constraintTop_toTopOf="@id/title_area" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_category_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/right_margin"
+        android:layout_marginRight="@dimen/right_margin"
+        android:layout_marginTop="@dimen/right_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_area">
+
+        <EditText
+            android:id="@+id/et_category_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-regular"
+            android:hint="@string/category_name"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="@dimen/normal_text_size" />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_cancel_in_category_dialog"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/category_btn_size"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/cancel"
+        android:textColor="@color/colorAccent"
+        android:textAllCaps="false"
+        android:background="@drawable/shape_for_cancel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/guideline_vertical"
+        android:layout_marginTop="@dimen/right_margin"
+        app:layout_constraintTop_toBottomOf="@id/til_category_name"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline_vertical"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/category_btn_size"
+        android:fontFamily="sans-serif-medium"
+        android:text="OK"
+        android:textColor="@color/colorAccent"
+        android:textAllCaps="false"
+        android:background="@drawable/shape_for_ok"
+        app:layout_constraintLeft_toRightOf="@id/guideline_vertical"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/til_category_name"
+        android:layout_marginTop="@dimen/right_margin"/>
+
+
+</android.support.constraint.ConstraintLayout>

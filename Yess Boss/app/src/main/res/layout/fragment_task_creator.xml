@@ -1,0 +1,226 @@
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.princeporosh.yessboss.TaskCreatorFragment">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_task_todo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/right_margin"
+        android:layout_marginLeft="@dimen/right_margin"
+        android:layout_marginRight="@dimen/right_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <EditText
+            android:id="@+id/et_task_todo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/task_to_do"
+            android:textSize="@dimen/normal_text_size"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="sans-serif-regular"
+            android:textColorHint="@color/lightBlue"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/right_margin"
+        android:layout_marginLeft="@dimen/right_margin"
+        android:layout_marginRight="@dimen/right_margin"
+        app:layout_constraintTop_toBottomOf="@id/til_task_todo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <EditText
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/on_date"
+            android:textSize="@dimen/normal_text_size"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="sans-serif-regular"
+            android:textColorHint="@color/colorPrimary"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/iv_calendar"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_calendar"
+        app:layout_constraintTop_toTopOf="@id/til_date"
+        app:layout_constraintBottom_toBottomOf="@id/til_date"
+        app:layout_constraintRight_toRightOf="@id/til_date"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/right_margin"
+        android:layout_marginLeft="@dimen/right_margin"
+        android:layout_marginRight="@dimen/right_margin"
+        app:layout_constraintTop_toBottomOf="@id/til_date"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <EditText
+            android:id="@+id/et_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/on_time"
+            android:textSize="@dimen/normal_text_size"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="sans-serif-regular"
+            android:textColorHint="@color/colorPrimary"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/iv_clock"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_clock"
+        app:layout_constraintTop_toTopOf="@id/til_time"
+        app:layout_constraintBottom_toBottomOf="@id/til_time"
+        app:layout_constraintRight_toRightOf="@id/til_time"/>
+
+    <ImageButton
+        android:id="@+id/btn_category_add"
+        android:layout_width="@dimen/category_btn_size"
+        android:layout_height="@dimen/category_btn_size"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_add_category"
+        android:layout_marginTop="@dimen/right_margin"
+        app:layout_constraintTop_toBottomOf="@id/til_time"
+        app:layout_constraintLeft_toLeftOf="@id/til_time"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_category_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/min_margin"
+        android:layout_marginLeft="@dimen/min_margin"
+        app:layout_constraintTop_toBottomOf="@id/til_time"
+        app:layout_constraintLeft_toRightOf="@id/btn_category_add"
+        app:layout_constraintRight_toRightOf="@id/til_time">
+
+        <EditText
+            android:id="@+id/et_catagory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/under_category_of"
+            android:textSize="@dimen/normal_text_size"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="sans-serif-regular"
+            android:textColorHint="@color/colorPrimary"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/iv_task_creator_drop_down"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:src="@drawable/ic_drop_down_arrow"
+        android:tint="@color/colorAccent"
+        app:layout_constraintTop_toTopOf="@id/til_category_list"
+        app:layout_constraintBottom_toBottomOf="@id/til_category_list"
+        app:layout_constraintRight_toRightOf="@id/til_category_list"/>
+
+    <TextView
+        android:id="@+id/tv_priority_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/priority_label"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/normal_text_size"
+        android:layout_marginTop="@dimen/large_margin"
+        app:layout_constraintTop_toBottomOf="@id/til_category_list"
+        app:layout_constraintLeft_toLeftOf="@id/til_time"/>
+
+    <ImageButton
+        android:id="@+id/btn_low_priority"
+        android:layout_width="@dimen/category_btn_size"
+        android:layout_height="@dimen/category_btn_size"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_low_priority"
+        android:layout_marginTop="@dimen/min_margin"
+        android:layout_marginLeft="@dimen/grade_margin"
+        android:padding="@dimen/category_btn_padding"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/tv_priority_label"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_high_priority"
+        android:layout_width="@dimen/category_btn_size"
+        android:layout_height="@dimen/category_btn_size"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_no_priority"
+        android:layout_marginTop="@dimen/min_margin"
+        android:layout_marginRight="@dimen/grade_margin"
+        android:padding="@dimen/category_btn_padding"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/tv_priority_label"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_mid_priority"
+        android:layout_width="@dimen/category_btn_size"
+        android:layout_height="@dimen/category_btn_size"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_no_priority"
+        android:layout_marginTop="@dimen/min_margin"
+        android:layout_marginLeft="@dimen/grade_margin"
+        android:padding="@dimen/category_btn_padding"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/tv_priority_label"
+        app:layout_constraintLeft_toRightOf="@id/btn_low_priority"
+        app:layout_constraintRight_toLeftOf="@id/btn_high_priority"/>
+
+    <TextView
+        android:id="@+id/tv_low_priority_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/low_level"
+        android:textSize="@dimen/medium_text_size"
+        android:textColor="@color/colorAccent"
+        android:fontFamily="sans-serif"
+        app:layout_constraintTop_toBottomOf="@id/btn_low_priority"
+        app:layout_constraintLeft_toLeftOf="@id/btn_low_priority"
+        app:layout_constraintRight_toRightOf="@id/btn_low_priority"/>
+
+    <TextView
+        android:id="@+id/tv_mid_priority_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mid_level"
+        android:textSize="@dimen/medium_text_size"
+        android:textColor="@color/noPriority"
+        android:fontFamily="sans-serif"
+        app:layout_constraintTop_toBottomOf="@id/btn_mid_priority"
+        app:layout_constraintLeft_toLeftOf="@id/btn_mid_priority"
+        app:layout_constraintRight_toRightOf="@id/btn_mid_priority"/>
+
+    <TextView
+        android:id="@+id/tv_high_priority_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/high_level"
+        android:textSize="@dimen/medium_text_size"
+        android:textColor="@color/noPriority"
+        android:fontFamily="sans-serif"
+        app:layout_constraintTop_toBottomOf="@id/btn_high_priority"
+        app:layout_constraintLeft_toLeftOf="@id/btn_high_priority"
+        app:layout_constraintRight_toRightOf="@id/btn_high_priority"/>
+
+</android.support.constraint.ConstraintLayout>
