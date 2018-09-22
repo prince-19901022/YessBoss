@@ -42,9 +42,11 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 public class TaskCreatorFragment extends Fragment implements View.OnClickListener, PopupListener, CategoryCreatorListener{
 
+    public interface TaskCreatorListener{
+        void onTaskCreationCompleted();
+    }
+
     private ToolbarWrapper toolbarWrapper;
-    private FloatingActionButton createTaskFAB;
-    private ViewPager pager;
 
     private EditText taskToDoEditText;
     private EditText onDateEditText;
@@ -64,6 +66,7 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
     private TimePickerDialog timePicker = null;
     private CategoryListPopup popup;
     private YesBossPreference prefYesBoss;
+    private TaskCreatorListener taskCreatorListener;
 
     private TheTask theTask;
 
@@ -71,12 +74,11 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
         // Required empty public constructor
     }
 
-    public static TaskCreatorFragment getInstanceOf(ToolbarWrapper toolbarWrapper, FloatingActionButton createTaskFAB, ViewPager pager){
+    public static TaskCreatorFragment getInstanceOf(ToolbarWrapper toolbarWrapper, TaskCreatorListener taskCreatorListener){
 
         TaskCreatorFragment taskCreatorFragment = new TaskCreatorFragment();
         taskCreatorFragment.toolbarWrapper = toolbarWrapper;
-        taskCreatorFragment.createTaskFAB = createTaskFAB;
-        taskCreatorFragment.pager = pager;
+        taskCreatorFragment.taskCreatorListener = taskCreatorListener;
         return taskCreatorFragment;
     }
 
@@ -356,18 +358,10 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        pager.setVisibility(View.GONE);
-        createTaskFAB.setVisibility(View.GONE);
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-        createTaskFAB.setVisibility(View.VISIBLE);
-        pager.setVisibility(View.VISIBLE);
+
+        taskCreatorListener.onTaskCreationCompleted();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(taskToDoEditText.getWindowToken(), 0);
     }
@@ -376,6 +370,8 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
     public void onCategorySelected(TaskCategory selectedCategory) {
 
         underTheCategoryEditText.setText(selectedCategory.getCategory());
+        TaskCategory.setLastSelectedCategory(selectedCategory.getCategory());
+        toolbarWrapper.setSelectedCategory(TaskCategory.getLastSelectedCategory());
         popup.dismissPopupWindow();
     }
 

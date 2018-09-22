@@ -15,12 +15,7 @@ import com.example.princeporosh.yessboss.model.TaskCategory;
 import com.example.princeporosh.yessboss.utility.CategoryListPopup;
 import com.example.princeporosh.yessboss.utility.ToolbarWrapper;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, PopupListener{
-
-    // Completed : Add View Pager with
-    // Completed : Implement Pop up Window for adding removing and selecting category.
-    // Completed : Implement Dialog for adding category.
-    // TODO : Implement the design of recycler view(Contains the list of tasks added) cell
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, PopupListener, TaskCreatorFragment.TaskCreatorListener{
 
     private FloatingActionButton createTaskFAB;
     private Toolbar toolBar;
@@ -42,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toolbarWrapper = ToolbarWrapper.getSingletonInstance(toolBar);
         toolbarWrapper.addCategoryClickListener(this);
+        toolbarWrapper.setSelectedCategory(TaskCategory.getLastSelectedCategory());
 
         pagerAdapter = new PagerAdapterYB(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
@@ -67,9 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void onTaskCreate() {
+
         viewPager.setVisibility(View.GONE);
+        createTaskFAB.setVisibility(View.GONE);
+
         toolbarWrapper.configToolBarForFragment();
-        TaskCreatorFragment fragment = TaskCreatorFragment.getInstanceOf(toolbarWrapper, createTaskFAB, viewPager);
+        TaskCreatorFragment fragment = TaskCreatorFragment.getInstanceOf(toolbarWrapper, this);
         categoryPopup.dismissPopupWindow();
 
         getSupportFragmentManager()
@@ -81,7 +80,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onCategorySelected(TaskCategory selectedCategory) {
+
         toolbarWrapper.setSelectedCategory(selectedCategory.getCategory());
+        TaskCategory.setLastSelectedCategory(selectedCategory.getCategory());
+
+        pagerAdapter.notifyAbout(selectedCategory);
         categoryPopup.dismissPopupWindow();
+    }
+
+
+    @Override
+    public void onTaskCreationCompleted() {
+        viewPager.setVisibility(View.VISIBLE);
+        createTaskFAB.setVisibility(View.VISIBLE);
+        pagerAdapter.reloadData();
     }
 }

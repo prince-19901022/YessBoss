@@ -8,6 +8,7 @@ public class TaskCategory {
 
     private String category;
     private boolean isPermanent;
+    private static String lastSelectedCategory = "All";
 
     public TaskCategory(String category, boolean isPermanent) {
         this.category = category;
@@ -20,5 +21,13 @@ public class TaskCategory {
 
     public boolean isPermanent() {
         return isPermanent;
+    }
+
+    public static String getLastSelectedCategory(){
+        return lastSelectedCategory;
+    }
+
+    public static void setLastSelectedCategory(String lsc){
+        lastSelectedCategory = lsc;
     }
 }

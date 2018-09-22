@@ -1,18 +1,27 @@
 package com.example.princeporosh.yessboss;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.princeporosh.yessboss.adapter.TaskListAdapter;
+import com.example.princeporosh.yessboss.model.TaskCategory;
 import com.example.princeporosh.yessboss.model.TheTask;
+import com.example.princeporosh.yessboss.preference.YesBossPreference;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +30,25 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TaskListFragment extends Fragment {
+public class TaskListFragment extends Fragment implements PopupListener, TaskCreatorFragment.TaskCreatorListener{
 
     private RecyclerView taskListRV;
     private TaskListAdapter adapter;
+    private YesBossPreference prefYesBoss;
+    private TextView noPendingTask;
+    private Context context;
 
     public TaskListFragment() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        prefYesBoss = new YesBossPreference(context);
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,52 +62,95 @@ public class TaskListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         taskListRV = view.findViewById(R.id.rv_task_list);
+        noPendingTask = view.findViewById(R.id.tv_msg_for_task_list);
 
-        taskListRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+        taskListRV.setLayoutManager(new LinearLayoutManager(context));
         taskListRV.setItemAnimator(new DefaultItemAnimator());
 
-        //TODO : 2. Remove getFakeTask() and populate RV with real task according to category
-        adapter = new TaskListAdapter(getFakeTask(), getActivity());
+        adapter = new TaskListAdapter(getTaskList(), context);
         taskListRV.setAdapter(adapter);
+
+        if(adapter.getItemCount() == 0){
+            noPendingTask.setVisibility(View.VISIBLE);
+        }
     }
 
-    private List<TheTask> getFakeTask(){
+    private List<TheTask> getTaskList(){
+        String category = TaskCategory.getLastSelectedCategory();
+
+        if (category.equals("All")){
+
+            List<TheTask> listOfAllTask = new ArrayList<>();
+
+            String categories = prefYesBoss.getCategories();
+
+            try {
+                JSONArray array = new JSONArray(categories);
+                JSONObject object;
+                int count = array.length();
+
+                for(int i= 0; i < count; i++){
+                    object = array.getJSONObject(i);
+                    listOfAllTask.addAll(getTaskListFor(object.getString("category")));
+                }
+
+                return listOfAllTask;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return getTaskListFor(category);
+    }
+
+    private List<TheTask> getTaskListFor(String category){
 
         List<TheTask> list = new ArrayList<>();
         TheTask task;
 
-        for(int i = 0; i < 5; i++){
-            task = new TheTask();
-            task.setPriorityLevel((byte) 1);
-            task.setTaskCategory("All");
-            task.setTaskDescription("This is just a low priority test task. Best Of Luck");
-            list.add(task);
-        }
+        String tasks = prefYesBoss.getTaskList(category);
 
-        for(int i = 0; i < 5; i++){
-            task = new TheTask();
-            task.setPriorityLevel((byte) 2);
-            task.setTaskCategory("All");
-            task.setTaskDescription("This is just a mid priority test task. Best Of Luck");
-            list.add(task);
-        }
+        if (!tasks.isEmpty()){
 
-        for(int i = 0; i < 5; i++){
-            task = new TheTask();
-            task.setPriorityLevel((byte) 3);
-            task.setTaskCategory("All");
-            task.setTaskDescription("This is just a high priority test task. Best Of Luck");
-            list.add(task);
-        }
+            try {
+                JSONArray array = new JSONArray(tasks);
+                int size = array.length();
 
-        for(int i = 0; i < 5; i++){
-            task = new TheTask();
-            task.setPriorityLevel((byte) 0);
-            task.setTaskCategory("All");
-            task.setTaskDescription("This is just a priority less test task. Best Of Luck");
-            list.add(task);
+                for (int i = 0; i < size; i++){
+
+                    JSONObject obj = array.getJSONObject(i);
+                    task = new TheTask();
+
+                    task.setTaskCategory(obj.getString("TaskCategory"));
+                    task.setTaskDescription(obj.getString("TaskDescription"));
+                    task.setPriorityLevel((byte) obj.getInt("PriorityLevel"));
+
+                    list.add(task);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         return list;
+    }
+
+    @Override
+    public void onCategorySelected(TaskCategory selectedCategory) {
+
+        adapter.setNewTasks(getTaskListFor(selectedCategory.getCategory()));
+
+        if(adapter.getItemCount() == 0){
+            noPendingTask.setVisibility(View.VISIBLE);
+        }else{
+            noPendingTask.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onTaskCreationCompleted() {
+        //Task will be loaded according last selected category
+        adapter.setNewTasks(getTaskList());
     }
 }

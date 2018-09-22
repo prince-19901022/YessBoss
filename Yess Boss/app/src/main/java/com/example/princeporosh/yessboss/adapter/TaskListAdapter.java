@@ -50,6 +50,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         return taskList.size();
     }
 
+    public void setNewTasks(List<TheTask> list){
+
+        taskList.clear();
+        taskList.addAll(list);
+        notifyDataSetChanged();
+    }
+
 
     class TaskViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener{
 
