@@ -16,5 +16,6 @@
     <string name="cancel">Cancel</string>
     <string name="preference_file">com.example.princeporosh.yessboss.preference.tempstorage</string>
     <string name="log_text">As we saw, RecyclerView is more effective than ListView, so I prefer to use it in my project. But recently I have a trouble when put it in my custom ViewGroup. RecyclerView is easy to set scrollbars in xml like this:</string>
+    <string name="no_task">No Pending Task</string>
 
 </resources>
