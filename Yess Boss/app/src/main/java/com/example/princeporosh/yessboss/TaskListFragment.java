@@ -139,7 +139,11 @@ public class TaskListFragment extends Fragment implements PopupListener, TaskCre
     @Override
     public void onCategorySelected(TaskCategory selectedCategory) {
 
-        adapter.setNewTasks(getTaskListFor(selectedCategory.getCategory()));
+        if(selectedCategory.getCategory().equals("All")){
+            adapter.setNewTasks(getTaskList());
+        }else{
+            adapter.setNewTasks(getTaskListFor(selectedCategory.getCategory()));
+        }
 
         if(adapter.getItemCount() == 0){
             noPendingTask.setVisibility(View.VISIBLE);

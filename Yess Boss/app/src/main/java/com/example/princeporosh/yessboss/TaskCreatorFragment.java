@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.princeporosh.yessboss.model.TaskCategory;
 import com.example.princeporosh.yessboss.model.TheTask;
@@ -77,6 +78,9 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
     private EditTextValidator taskValidator;
     private EditTextValidator categoryValidator;
 
+    private EditTextValidator dateValidator;
+    private EditTextValidator timeValidator;
+
     public TaskCreatorFragment() {
         // Required empty public constructor
     }
@@ -128,9 +132,43 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
         onDateEditText.setKeyListener(null);
         onDateEditText.setOnClickListener(this);
 
+        dateValidator = new EditTextValidator(onDateEditText,
+                (TextView) view.findViewById(R.id.tv_date_error_view));
+        dateValidator.setErrorColor("#0080a8");
+        dateValidator.setErrorMessage("Selected Date Is Elapsed And Not Acceptable");
+
+        dateValidator.setCustomValidation(new EditTextValidator.ValidationLogicSpecification() {
+            @Override
+            public boolean isValidAccordingToSpecifiedLogic(String text) {
+
+                //TODO : Determine date specified in text e.g : 12/12/12 is elapsed or not
+                //TODO : Return false if elapsed and true otherwise
+
+                return true;
+            }
+        });
+
+        onDateEditText.addTextChangedListener(dateValidator);
+
         onTimeEditText.setFocusable(false);
         onTimeEditText.setKeyListener(null);
         onTimeEditText.setOnClickListener(this);
+
+        timeValidator = new EditTextValidator(onTimeEditText,
+                (TextView) view.findViewById(R.id.tv_time_error_view));
+        dateValidator.setErrorColor("#0080a8");
+        dateValidator.setErrorMessage("Selected Date Is Elapsed And Not Acceptable");
+        timeValidator.setCustomValidation(new EditTextValidator.ValidationLogicSpecification() {
+            @Override
+            public boolean isValidAccordingToSpecifiedLogic(String text) {
+
+                //TODO : Determine time specified in text e.g : 12 : 09 AM is elapsed or not
+                //TODO : Return false if elapsed and true otherwise
+                return true;
+            }
+        });
+
+        onTimeEditText.addTextChangedListener(timeValidator);
 
         underTheCategoryEditText.setFocusable(false);
         underTheCategoryEditText.setKeyListener(null);
@@ -178,6 +216,8 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
 
         boolean shouldSave = taskValidator.isValid();
         shouldSave &= categoryValidator.isValid();
+        dateValidator.isValid();
+        timeValidator.isValid();
 
         if(shouldSave){
             theTask.setTaskDescription(taskToDoEditText.getText().toString());
@@ -402,6 +442,8 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
                 object.put("isPermanent", category.isPermanent());
                 array.put(object);
                 prefYesBoss.saveTaskCategory(array.toString());
+            }else{
+                Toast.makeText(getActivity(), "You Specified Empty Category",Toast.LENGTH_SHORT);
             }
 
         } catch (JSONException e) {
