@@ -3,10 +3,13 @@ package com.example.princeporosh.yessboss;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -25,6 +28,7 @@ import com.example.princeporosh.yessboss.model.TheTask;
 import com.example.princeporosh.yessboss.preference.YesBossPreference;
 import com.example.princeporosh.yessboss.utility.CategoryCreatorListener;
 import com.example.princeporosh.yessboss.utility.CategoryListPopup;
+import com.example.princeporosh.yessboss.utility.EditTextValidator;
 import com.example.princeporosh.yessboss.utility.ToolbarWrapper;
 import com.example.princeporosh.yessboss.utility.ViewUtils;
 
@@ -70,6 +74,9 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
 
     private TheTask theTask;
 
+    private EditTextValidator taskValidator;
+    private EditTextValidator categoryValidator;
+
     public TaskCreatorFragment() {
         // Required empty public constructor
     }
@@ -114,6 +121,9 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
 
         popup = new CategoryListPopup(getActivity(), underTheCategoryEditText);
 
+        taskValidator = new EditTextValidator(taskToDoEditText, (TextView) view.findViewById(R.id.tv_task_error_view));
+        taskToDoEditText.addTextChangedListener(taskValidator);
+
         onDateEditText.setFocusable(false);
         onDateEditText.setKeyListener(null);
         onDateEditText.setOnClickListener(this);
@@ -125,6 +135,9 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
         underTheCategoryEditText.setFocusable(false);
         underTheCategoryEditText.setKeyListener(null);
         underTheCategoryEditText.setOnClickListener(this);
+
+        categoryValidator = new EditTextValidator(underTheCategoryEditText, (TextView) view.findViewById(R.id.tv_category_error_view));
+        underTheCategoryEditText.addTextChangedListener(categoryValidator);
 
         lowPriorityIndicator.setOnClickListener(this);
         midPriorityIndicator.setOnClickListener(this);
@@ -163,34 +176,38 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
 
     private void onTaskSaved(){
 
-        theTask.setTaskDescription(taskToDoEditText.getText().toString());
-        theTask.setTaskCategory(underTheCategoryEditText.getText().toString());
+        boolean shouldSave = taskValidator.isValid();
+        shouldSave &= categoryValidator.isValid();
 
-        JSONArray taskArray;
-        String prevTasks = prefYesBoss.getTaskList(theTask.getTaskCategory());
+        if(shouldSave){
+            theTask.setTaskDescription(taskToDoEditText.getText().toString());
+            theTask.setTaskCategory(underTheCategoryEditText.getText().toString());
 
-        try{
-            if(prevTasks.isEmpty()){
-                taskArray = new JSONArray();
-            }else{
-                taskArray = new JSONArray(prevTasks);
+            JSONArray taskArray;
+            String prevTasks = prefYesBoss.getTaskList(theTask.getTaskCategory());
+
+            try{
+                if(prevTasks.isEmpty()){
+                    taskArray = new JSONArray();
+                }else{
+                    taskArray = new JSONArray(prevTasks);
+                }
+
+                JSONObject jsonTask = new JSONObject();
+                jsonTask.put("TaskDescription", theTask.getTaskDescription());
+                jsonTask.put("TaskCategory",theTask.getTaskCategory());
+                jsonTask.put("PriorityLevel",theTask.getPriorityLevel());
+                jsonTask.put("Date",theTask.getDate());
+                jsonTask.put("Time",theTask.getTime());
+                taskArray.put(jsonTask);
+
+                prefYesBoss.saveTaskC(theTask.getTaskCategory(), taskArray.toString());
+                removeOwnSelf();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            JSONObject jsonTask = new JSONObject();
-            jsonTask.put("TaskDescription", theTask.getTaskDescription());
-            jsonTask.put("TaskCategory",theTask.getTaskCategory());
-            jsonTask.put("PriorityLevel",theTask.getPriorityLevel());
-            jsonTask.put("Date",theTask.getDate());
-            jsonTask.put("Time",theTask.getTime());
-            taskArray.put(jsonTask);
-
-            prefYesBoss.saveTaskC(theTask.getTaskCategory(), taskArray.toString());
-            removeOwnSelf();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
     }
 
     private void removeOwnSelf(){
@@ -204,7 +221,6 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
     }
 
     private void onLowPriorityIndicatorClick(){
-
         assignPriority((byte) 1);
     }
 
@@ -229,7 +245,7 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
             };
 
             int [] dateElements = getDateToShow();
-            datePicker = new DatePickerDialog(getActivity(), onDateSet, dateElements[0],
+            datePicker = new DatePickerDialog(getContext(), onDateSet, dateElements[0],
                     dateElements[1], dateElements[2]);
         }
 

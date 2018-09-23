@@ -13,4 +13,5 @@
     <color name="grayishWhile">#e5e5e5</color>
 
     <color name="noPriority">#8a003663</color>
+    <color name="error_color_dangerous">#ff0011</color>
 </resources>
