@@ -29,6 +29,19 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tv_task_error_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/error_color_dangerous"
+        android:fontFamily="sans-serif-regular"
+        android:layout_marginLeft="4dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/til_task_todo"
+        app:layout_constraintLeft_toLeftOf="@id/til_task_todo"
+        app:layout_constraintRight_toRightOf="@id/til_task_todo"/>
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_date"
         android:layout_width="0dp"
@@ -36,7 +49,7 @@
         android:layout_marginTop="@dimen/right_margin"
         android:layout_marginLeft="@dimen/right_margin"
         android:layout_marginRight="@dimen/right_margin"
-        app:layout_constraintTop_toBottomOf="@id/til_task_todo"
+        app:layout_constraintTop_toBottomOf="@id/tv_task_error_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -61,6 +74,19 @@
         app:layout_constraintBottom_toBottomOf="@id/til_date"
         app:layout_constraintRight_toRightOf="@id/til_date"/>
 
+    <TextView
+        android:id="@+id/tv_date_error_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/error_color_dangerous"
+        android:fontFamily="sans-serif-regular"
+        android:layout_marginLeft="4dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/til_date"
+        app:layout_constraintLeft_toLeftOf="@id/til_date"
+        app:layout_constraintRight_toRightOf="@id/til_date"/>
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_time"
         android:layout_width="0dp"
@@ -68,7 +94,7 @@
         android:layout_marginTop="@dimen/right_margin"
         android:layout_marginLeft="@dimen/right_margin"
         android:layout_marginRight="@dimen/right_margin"
-        app:layout_constraintTop_toBottomOf="@id/til_date"
+        app:layout_constraintTop_toBottomOf="@id/tv_date_error_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -83,6 +109,19 @@
             android:textColorHint="@color/colorPrimary"/>
 
     </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_time_error_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/error_color_dangerous"
+        android:fontFamily="sans-serif-regular"
+        android:layout_marginLeft="4dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/til_time"
+        app:layout_constraintLeft_toLeftOf="@id/til_time"
+        app:layout_constraintRight_toRightOf="@id/til_time"/>
 
     <ImageView
         android:id="@+id/iv_clock"
@@ -100,7 +139,7 @@
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/ic_add_category"
         android:layout_marginTop="@dimen/right_margin"
-        app:layout_constraintTop_toBottomOf="@id/til_time"
+        app:layout_constraintTop_toBottomOf="@id/tv_time_error_view"
         app:layout_constraintLeft_toLeftOf="@id/til_time"/>
 
     <android.support.design.widget.TextInputLayout
@@ -109,7 +148,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/min_margin"
         android:layout_marginLeft="@dimen/min_margin"
-        app:layout_constraintTop_toBottomOf="@id/til_time"
+        app:layout_constraintTop_toBottomOf="@id/tv_time_error_view"
         app:layout_constraintLeft_toRightOf="@id/btn_category_add"
         app:layout_constraintRight_toRightOf="@id/til_time">
 
@@ -122,8 +161,20 @@
             android:textColor="@color/colorAccent"
             android:fontFamily="sans-serif-regular"
             android:textColorHint="@color/colorPrimary"/>
-
     </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_category_error_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/error_color_dangerous"
+        android:fontFamily="sans-serif-regular"
+        android:layout_marginLeft="4dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/til_category_list"
+        app:layout_constraintLeft_toLeftOf="@id/til_category_list"
+        app:layout_constraintRight_toRightOf="@id/til_category_list"/>
 
     <ImageView
         android:id="@+id/iv_task_creator_drop_down"
