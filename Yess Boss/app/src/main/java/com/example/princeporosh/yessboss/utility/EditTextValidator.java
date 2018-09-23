@@ -17,6 +17,12 @@ import com.example.princeporosh.yessboss.model.TheTask;
 
 public class EditTextValidator implements TextWatcher {
 
+    //If it is required to imply different logic for validation
+
+    public interface ValidationLogicSpecification{
+        boolean isValidAccordingToSpecifiedLogic(String text);
+    }
+
     //The edit text to validate
     private EditText editText;
 
@@ -35,6 +41,9 @@ public class EditTextValidator implements TextWatcher {
     //So, this field provides option to change color depending on the type of error.
 
     private String errorColor = "#FF0011";
+
+    //To inject custom logic for validation.
+    private ValidationLogicSpecification customValidation;
 
     public EditTextValidator(EditText editText, TextView errorView){
         this.editText = editText;
@@ -66,15 +75,21 @@ public class EditTextValidator implements TextWatcher {
     public boolean isValid() {
 
         String text = editText.getText().toString();
-        if (text.isEmpty()) {
-            isValid = false;
-            setEditTextBorderColor(errorColor);
-            errorView.setVisibility(View.VISIBLE);
-            errorView.setText(errorMessage);
-        } else {
-            isValid = true;
-            setEditTextBorderColor(null);
-            errorView.setVisibility(View.GONE);
+
+        if(customValidation != null){ //Means i want to use custom validation.
+            isValid = customValidation.isValidAccordingToSpecifiedLogic(text);
+        }else{
+
+            if (text.isEmpty()) {
+                isValid = false;
+                setEditTextBorderColor(errorColor);
+                errorView.setVisibility(View.VISIBLE);
+                errorView.setText(errorMessage);
+            } else {
+                isValid = true;
+                setEditTextBorderColor(null);
+                errorView.setVisibility(View.GONE);
+            }
         }
         return isValid;
     }
@@ -85,5 +100,9 @@ public class EditTextValidator implements TextWatcher {
 
     public void setErrorColor(String errorColor) {
         this.errorColor = errorColor;
+    }
+
+    public void setCustomValidation(ValidationLogicSpecification customValidation){
+        this.customValidation = customValidation;
     }
 }
