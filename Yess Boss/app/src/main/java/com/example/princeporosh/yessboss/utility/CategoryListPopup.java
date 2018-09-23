@@ -102,7 +102,9 @@ public class CategoryListPopup {
             categoryListPopup.showAtLocation(anchorView, Gravity.NO_GRAVITY, anchorCoordinate[0], anchorCoordinate[1] - popupHeight);
             isShowing = true;
 
-            adapter.setSavedCategories(getSavedCategories());
+            List<TaskCategory> catList = getSavedCategories();
+            catList.remove(0);
+            adapter.setSavedCategories(catList);
         }
     }
 
