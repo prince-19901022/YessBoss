@@ -3,15 +3,10 @@ package com.example.princeporosh.yessboss;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -222,31 +217,10 @@ public class TaskCreatorFragment extends Fragment implements View.OnClickListene
         if(shouldSave){
             theTask.setTaskDescription(taskToDoEditText.getText().toString());
             theTask.setTaskCategory(underTheCategoryEditText.getText().toString());
+            theTask.setDone(false);
 
-            JSONArray taskArray;
-            String prevTasks = prefYesBoss.getTaskList(theTask.getTaskCategory());
-
-            try{
-                if(prevTasks.isEmpty()){
-                    taskArray = new JSONArray();
-                }else{
-                    taskArray = new JSONArray(prevTasks);
-                }
-
-                JSONObject jsonTask = new JSONObject();
-                jsonTask.put("TaskDescription", theTask.getTaskDescription());
-                jsonTask.put("TaskCategory",theTask.getTaskCategory());
-                jsonTask.put("PriorityLevel",theTask.getPriorityLevel());
-                jsonTask.put("Date",theTask.getDate());
-                jsonTask.put("Time",theTask.getTime());
-                taskArray.put(jsonTask);
-
-                prefYesBoss.saveTaskC(theTask.getTaskCategory(), taskArray.toString());
-                removeOwnSelf();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            prefYesBoss.insertTask(theTask);
+            removeOwnSelf();
         }
     }
 

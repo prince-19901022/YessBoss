@@ -12,6 +12,8 @@ public class TheTask {
     private String taskCategory = "";
     private byte priorityLevel;
 
+    private boolean isDone;
+
     public String getTaskDescription() {
         return taskDescription;
     }
@@ -50,5 +52,13 @@ public class TheTask {
 
     public void setPriorityLevel(byte priorityLevel) {
         this.priorityLevel = priorityLevel;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 }

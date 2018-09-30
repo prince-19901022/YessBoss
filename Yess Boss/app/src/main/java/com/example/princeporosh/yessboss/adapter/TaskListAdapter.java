@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.princeporosh.yessboss.R;
+import com.example.princeporosh.yessboss.model.TaskCategory;
 import com.example.princeporosh.yessboss.model.TheTask;
+import com.example.princeporosh.yessboss.preference.YesBossPreference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +25,13 @@ import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>{
 
+    public interface TaskRemovedListener{
+       void onItemRemoved();
+    }
+
     private List<TheTask> taskList;
     private Context context;
+    private TaskRemovedListener taskRemovedListener;
 
     public TaskListAdapter(List<TheTask> taskList, Context context) {
         this.taskList = taskList;
@@ -42,7 +50,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
 
-        holder.bindItemViewWith(taskList.get(position));
+        TheTask task = taskList.get(position);
+        if(!task.isDone()){
+            holder.bindItemViewWith(task);
+        }
     }
 
     @Override
@@ -57,6 +68,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         notifyDataSetChanged();
     }
 
+    public void setTaskRemovedListener(TaskRemovedListener taskRemovedListener) {
+        this.taskRemovedListener = taskRemovedListener;
+    }
 
     class TaskViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener{
 
@@ -110,9 +124,38 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
             if (isChecked){
-                //TODO : Remove The Item At getAdapterPosition().
-                //TODO : Update Preference
+                //Completed : Remove The Item At getAdapterPosition().
+                //Completed : Update Preference
+
+                int pos = getAdapterPosition();
+                taskList.get(pos).setDone(isChecked);
+
+                YesBossPreference prefYesBoss = new YesBossPreference(context);
+                prefYesBoss.updateTask(getListToBeUpdate(taskList.get(pos)));
+
+                taskList.remove(pos);
+                notifyItemRemoved(pos);
+                taskRemovedListener.onItemRemoved();
             }
+        }
+
+        private List<TheTask> getListToBeUpdate(TheTask task){
+
+            if(TaskCategory.getLastSelectedCategory().equals("All")){
+
+                List<TheTask> list = new ArrayList<>();
+
+                for(TheTask item : taskList){
+
+                    if(item.getTaskCategory().equals(task.getTaskCategory())){
+                        list.add(item);
+                    }
+                }
+
+                return list;
+            }
+
+            return taskList;
         }
     }
 }

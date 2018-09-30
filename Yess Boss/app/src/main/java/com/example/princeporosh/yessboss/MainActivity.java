@@ -2,6 +2,7 @@ package com.example.princeporosh.yessboss;
 
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import com.example.princeporosh.yessboss.adapter.PagerAdapterYB;
 import com.example.princeporosh.yessboss.model.TaskCategory;
 import com.example.princeporosh.yessboss.utility.CategoryListPopup;
 import com.example.princeporosh.yessboss.utility.ToolbarWrapper;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, PopupListener, TaskCreatorFragment.TaskCreatorListener{
 
@@ -46,6 +49,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         categoryPopup.addPopupListener(this);
 
         setSupportActionBar(toolBar);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
+        if(fragment instanceof TaskCreatorFragment){
+            viewPager.setVisibility(View.GONE);
+            createTaskFAB.setVisibility(View.GONE);
+        }
     }
 
     @Override

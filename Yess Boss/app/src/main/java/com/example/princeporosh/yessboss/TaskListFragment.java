@@ -67,94 +67,50 @@ public class TaskListFragment extends Fragment implements PopupListener, TaskCre
         taskListRV.setLayoutManager(new LinearLayoutManager(context));
         taskListRV.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new TaskListAdapter(getTaskList(), context);
+        String category = TaskCategory.getLastSelectedCategory();
+        adapter = new TaskListAdapter(category.equals("All") ? prefYesBoss.getAllTask(true) : prefYesBoss.getTaskFor(category, true),
+               context);
+
+        adapter.setTaskRemovedListener(new TaskListAdapter.TaskRemovedListener() {
+            @Override
+            public void onItemRemoved() {
+                handleEmptyMsgVisibility();
+            }
+        });
+
         taskListRV.setAdapter(adapter);
 
-        if(adapter.getItemCount() == 0){
-            noPendingTask.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private List<TheTask> getTaskList(){
-        String category = TaskCategory.getLastSelectedCategory();
-
-        if (category.equals("All")){
-
-            List<TheTask> listOfAllTask = new ArrayList<>();
-
-            String categories = prefYesBoss.getCategories();
-
-            try {
-                JSONArray array = new JSONArray(categories);
-                JSONObject object;
-                int count = array.length();
-
-                for(int i= 0; i < count; i++){
-                    object = array.getJSONObject(i);
-                    listOfAllTask.addAll(getTaskListFor(object.getString("category")));
-                }
-
-                return listOfAllTask;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return getTaskListFor(category);
-    }
-
-    private List<TheTask> getTaskListFor(String category){
-
-        List<TheTask> list = new ArrayList<>();
-        TheTask task;
-
-        String tasks = prefYesBoss.getTaskList(category);
-
-        if (!tasks.isEmpty()){
-
-            try {
-                JSONArray array = new JSONArray(tasks);
-                int size = array.length();
-
-                for (int i = 0; i < size; i++){
-
-                    JSONObject obj = array.getJSONObject(i);
-                    task = new TheTask();
-
-                    task.setTaskCategory(obj.getString("TaskCategory"));
-                    task.setTaskDescription(obj.getString("TaskDescription"));
-                    task.setPriorityLevel((byte) obj.getInt("PriorityLevel"));
-
-                    list.add(task);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return list;
+        handleEmptyMsgVisibility();
     }
 
     @Override
     public void onCategorySelected(TaskCategory selectedCategory) {
 
         if(selectedCategory.getCategory().equals("All")){
-            adapter.setNewTasks(getTaskList());
+            adapter.setNewTasks(prefYesBoss.getAllTask(true));
         }else{
-            adapter.setNewTasks(getTaskListFor(selectedCategory.getCategory()));
+            adapter.setNewTasks(prefYesBoss.getTaskFor(selectedCategory.getCategory(),true));
         }
 
-        if(adapter.getItemCount() == 0){
-            noPendingTask.setVisibility(View.VISIBLE);
-        }else{
-            noPendingTask.setVisibility(View.INVISIBLE);
-        }
+        handleEmptyMsgVisibility();
     }
 
     @Override
     public void onTaskCreationCompleted() {
         //Task will be loaded according last selected category
-        adapter.setNewTasks(getTaskList());
+        adapter.setNewTasks(
+                TaskCategory.getLastSelectedCategory().equals("All") ?
+                        prefYesBoss.getAllTask(true) :
+                        prefYesBoss.getTaskFor(TaskCategory.getLastSelectedCategory(),true));
+
+        handleEmptyMsgVisibility();
+    }
+
+    private void handleEmptyMsgVisibility(){
+        if(adapter.getItemCount() == 0){
+            noPendingTask.setVisibility(View.VISIBLE);
+        }else{
+            noPendingTask.setVisibility(View.INVISIBLE);
+        }
     }
 }
